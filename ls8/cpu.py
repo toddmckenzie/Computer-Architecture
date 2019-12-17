@@ -88,7 +88,8 @@ class CPU:
                 self.alu('SAVE', value1, value2)
                 self.pc += 3
             elif instruction_register == PRN:
-                print(self.reg[0])
+                reg_num = self.ram_read(self.pc + 1)
+                print(self.reg[reg_num])
                 self.pc += 2
             elif instruction_register == HLT:
                 flag = False
