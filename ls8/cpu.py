@@ -2,7 +2,7 @@
 
 import sys
 HLT =  0b00000001
-
+PRN =  0b01000111
 class CPU:
     """Main CPU class."""
 
@@ -77,20 +77,16 @@ class CPU:
         """Run the CPU."""
         flag = True
         while flag:
+
             instruction_register = self.ram[self.pc]
-            if self.pc > len(self.ram):
-                flag = False
-                break
-            instruction1 = self.ram_read(self.pc + 1)
-            instruction2 = self.ram_read(self.pc + 2)
-            if instruction1 == 'ADD':
-                print(f"Here is self.alu {self.alu(instruction1, instruction_register, instruction2)}")
+
+            if self.ram[self.pc + 1] == PRN:
+                print(instruction_register)
+                
             if instruction_register == HLT:
                 flag = False
                 break
-            else:
-                print(instruction_register)
-
+        
             self.pc += 1
 
 
