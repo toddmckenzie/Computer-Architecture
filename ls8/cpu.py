@@ -1,8 +1,9 @@
 """CPU functionality."""
 
 import sys
-HLT =  0b00000001
-PRN =  0b01000111
+HLT = 0b00000001
+PRN = 0b01000111
+LDI = 0b10000010
 class CPU:
     """Main CPU class."""
 
@@ -43,6 +44,8 @@ class CPU:
         if op == "ADD":
             self.reg[reg_a] += self.reg[reg_b]
         #elif op == "SUB": etc
+        elif op == "SAVE":
+            self.reg[reg_a] = reg_b
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -79,10 +82,14 @@ class CPU:
         while flag:
 
             instruction_register = self.ram[self.pc]
-
+            
+            if instruction_register == LDI:
+                value1 =  self.ram_read(self.pc + 1)
+                value2 =  self.ram_read(self.pc + 2)
+                self.alu('SAVE', value1, value2)
             if self.ram[self.pc + 1] == PRN:
                 print(instruction_register)
-                
+                print(self.reg[0])
             if instruction_register == HLT:
                 flag = False
                 break
