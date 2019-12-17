@@ -82,19 +82,19 @@ class CPU:
         while flag:
 
             instruction_register = self.ram[self.pc]
-            
             if instruction_register == LDI:
                 value1 =  self.ram_read(self.pc + 1)
                 value2 =  self.ram_read(self.pc + 2)
                 self.alu('SAVE', value1, value2)
-            if self.ram[self.pc + 1] == PRN:
-                print(instruction_register)
+                self.pc += 3
+            elif instruction_register == PRN:
                 print(self.reg[0])
-            if instruction_register == HLT:
+                self.pc += 2
+            elif instruction_register == HLT:
                 flag = False
                 break
-        
-            self.pc += 1
+            else:
+                self.pc += 1
 
 
             
