@@ -1,7 +1,7 @@
 """CPU functionality."""
 
 import sys
-# HLT =  0b00000001
+HLT =  0b00000001
 
 class CPU:
     """Main CPU class."""
@@ -13,7 +13,7 @@ class CPU:
         self.reg = [0] * 8
         self.ram = [0] * 8
         self.pc = 0
-        self.branchtable = { HLT: 0b00000001 }
+
 
     def load(self):
         """Load a program into memory."""
@@ -77,16 +77,20 @@ class CPU:
         """Run the CPU."""
         flag = True
         while flag:
-            instruction_register = self.ram[pc]
+            instruction_register = self.ram[self.pc]
             if self.pc > len(self.ram):
                 flag = False
                 break
-            val1 = self.ram_read[pc + 1]
-            val2 = self.ram_rad[pc + 2]
-            temp = self.alu(val1, val2)
-            if instruction_regsiter == HLT:
+            instruction1 = self.ram_read(self.pc + 1)
+            instruction2 = self.ram_read(self.pc + 2)
+            if instruction1 == 'ADD':
+                print(f"Here is self.alu {self.alu(instruction1, instruction_register, instruction2)}")
+            if instruction_register == HLT:
                 flag = False
                 break
+            else:
+                print(instruction_register)
+
             self.pc += 1
 
 
