@@ -10,8 +10,8 @@ class CPU:
         """Construct a new CPU."""
         #memory ??
         #registers ?? register = [0] * 8
-        self.reg = [0] * 8
-        self.ram = [0] * 8
+        self.reg = [0] * 8 #8 slots
+        self.ram = [0] * 8 #256 bytes of memory
         self.pc = 0
 
 
