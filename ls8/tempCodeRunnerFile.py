@@ -1,1 +1,2 @@
-print(bin(line))
+
+                self.reg[SP] -= 1

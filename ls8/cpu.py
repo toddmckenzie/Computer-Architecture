@@ -1,11 +1,15 @@
 """CPU functionality."""
- 
+
 import sys
 
 HLT = 0b00000001
 PRN = 0b01000111
 LDI = 0b10000010
 MUL = 0b10100010
+# SP = 0xF3 #F3 hex, 243 decimal, 0b11110011 binary stackpointer....
+POP = 0b01000110
+PUSH = 0b01000101
+
 class CPU:
     """Main CPU class."""
 
@@ -17,7 +21,6 @@ class CPU:
         self.ram = [0] * 256 #256 bytes of memory
         self.pc = 0
         self.branch = {}
-
 
     def load(self):
         """Load a program into memory."""
@@ -36,7 +39,7 @@ class CPU:
         #     0b00000001, # HLT
         # ]
 
-        file = open('ls8/examples/mult.ls8', 'r')
+        file = open('ls8/examples/stack.ls8', 'r')
 
         for line in file:
             line = line.split('#')[0]
@@ -95,6 +98,8 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
+        SP = 7
+        self.reg[SP] = 0xf3
         flag = True
         while flag:
             instruction_register = self.ram[self.pc]
@@ -113,6 +118,18 @@ class CPU:
                 reg_num2 = self.ram_read(self.pc + 2)
                 self.alu("MUL", reg_num1, reg_num2)
                 self.pc += 3
+            elif instruction_register == POP: #reg and ram
+                value = self.ram[SP]
+                reg_num = self.ram[self.pc + 1]
+                self.reg[reg_num] = value
+                self.reg[SP] += 1
+                self.pc += 2
+            elif instruction_register == PUSH:
+                self.reg[SP] -= 1
+                reg_num = self.ram[self.pc + 1]
+                reg_val = self.reg[reg_num]
+                self.ram[SP] = reg_val
+                self.pc += 2
             elif instruction_register == HLT:
                 flag = False
                 break
@@ -121,7 +138,7 @@ class CPU:
 
 
             
-
+#Stack pointer looks at top of the stack or F3 if empty. 243 decimal // binary == 11110011....
 
 cpu = CPU()
 
