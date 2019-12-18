@@ -37,19 +37,19 @@ class CPU:
         # ]
 
         file = open('ls8/examples/mult.ls8', 'r')
+
         for line in file:
+            line = line.split('#')[0]
             line = line.strip()
-            line = line.split('#')
-            program.append('0b' + str(line[0]))
-            print('0b' + line[0])
+            line = int(line, 2)
+            program.append(line)
+            
+        
 
         for instruction in program:
             self.ram[address] = instruction
             address += 1
         
-
-
-        # file.read()
 
 
     def alu(self, op, reg_a, reg_b):
@@ -97,9 +97,8 @@ class CPU:
         """Run the CPU."""
         flag = True
         while flag:
-
             instruction_register = self.ram[self.pc]
-            print(instruction_register)
+            
             if instruction_register == LDI:
                 reg_num = self.ram_read(self.pc + 1)
                 value = self.ram_read(self.pc + 2)
@@ -112,7 +111,8 @@ class CPU:
             elif instruction_register == MUL:
                 reg_num1 = self.ram_read(self.pc + 1)
                 reg_num2 = self.ram_read(self.pc + 2)
-                self.alu(instruction_register, reg_num1, reg_num2)
+                self.alu("MUL", reg_num1, reg_num2)
+                self.pc += 3
             elif instruction_register == HLT:
                 flag = False
                 break

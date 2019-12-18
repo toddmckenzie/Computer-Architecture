@@ -1,4 +1,1 @@
-
-
-
-cpu = CPU()
+print(bin(line))
