@@ -119,8 +119,8 @@ class CPU:
                 self.alu("MUL", reg_num1, reg_num2)
                 self.pc += 3
             elif instruction_register == POP: #reg and ram
-                value = self.ram[SP]
-                reg_num = self.ram[self.pc + 1]
+                reg_num = self.ram[self.pc + 1] 
+                value = self.ram[self.reg[SP]]
                 self.reg[reg_num] = value
                 self.reg[SP] += 1
                 self.pc += 2
@@ -128,7 +128,7 @@ class CPU:
                 self.reg[SP] -= 1
                 reg_num = self.ram[self.pc + 1]
                 reg_val = self.reg[reg_num]
-                self.ram[SP] = reg_val
+                self.ram[self.reg[SP]] = reg_val
                 self.pc += 2
             elif instruction_register == HLT:
                 flag = False
