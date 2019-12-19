@@ -1,1 +1,1 @@
- 
+print(line)
