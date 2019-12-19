@@ -130,6 +130,7 @@ class CPU:
                 reg_val = self.reg[reg_num]
                 self.ram[self.reg[SP]] = reg_val
                 self.pc += 2
+                print(self.reg)
             elif instruction_register == HLT:
                 flag = False
                 break
