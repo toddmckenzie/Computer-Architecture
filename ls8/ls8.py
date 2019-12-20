@@ -7,5 +7,5 @@ from cpu import *
 
 cpu = CPU()
 
-cpu.load('call')
+cpu.load('sprint')
 cpu.run()

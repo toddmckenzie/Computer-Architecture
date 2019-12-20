@@ -12,7 +12,14 @@ PUSH = 0b01000101
 CALL = 0b01010000
 RET = 0b00010001
 ADD = 0b10100000
+CMP = 0b10100111
+JEQ = 0b01010101
+JNE = 0b01010110
+JMP = 0b01010100
 SP = 7
+E = 0
+L = 0
+G = 0
 class CPU:
     """Main CPU class."""
 
@@ -70,6 +77,21 @@ class CPU:
             self.reg[reg_a] *= self.reg[reg_b]
         elif op == "DIVD":
             self.reg[reg_a] /= self.reg[reg_b]
+        elif op == "COMP":
+            if self.reg[reg_a] == self.reg[reg_b]:
+                E = 1
+            else:
+                E = 0
+            
+            if self.reg[reg_a] < self.reg[reg_b]:
+                L = 1
+            else: 
+                L = 0
+            
+            if self.reg[reg_a] > self.reg[reg_b]:
+                G = 1
+            else:
+                G = 0
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -150,6 +172,26 @@ class CPU:
                 return_address = self.ram[self.reg[SP]]
                 self.reg[SP] += 1
                 self.pc = return_address
+            elif instruction_register == CMP:
+                value1 = self.ram[self.pc + 1]
+                value2 = self.ram[self.pc + 2]
+                self.alu('COMP', value1, value2)
+                self.pc += 3
+            elif instruction_register == JMP:
+                new_address = self.ram[self.pc +1]
+                self.pc = self.reg[new_address]
+            elif instruction_register == JEQ:
+                if E == 1:
+                    new_address = self.ram[self.pc + 1]
+                    self.pc = self.reg[new_address]
+                else:
+                    self.pc += 2
+            elif instruction_register == JNE:
+                if E == 0:
+                    new_address = self.ram[self.pc + 1]
+                    self.pc = self.reg[new_address]
+                else:
+                    self.pc += 2
             elif instruction_register == HLT:
                 flag = False
                 break
