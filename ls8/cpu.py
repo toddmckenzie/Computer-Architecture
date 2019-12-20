@@ -17,9 +17,7 @@ JEQ = 0b01010101
 JNE = 0b01010110
 JMP = 0b01010100
 SP = 7
-# E = 0
-L = 0
-G = 0 
+
 
 class CPU:
     """Main CPU class."""
@@ -33,6 +31,9 @@ class CPU:
         self.pc = 0
         self.branch = {}
         self.E = 0
+        self.L = 0
+        self.G = 0
+
     def load(self, fileLoaded):
         """Load a program into memory."""
 
@@ -85,14 +86,14 @@ class CPU:
                 self.E = 0
             
             if self.reg[reg_a] < self.reg[reg_b]:
-                L = 1
+                self.L = 1
             else: 
-                L = 0
+                self.L = 0
             
             if self.reg[reg_a] > self.reg[reg_b]:
-                G = 1
+                self.G = 1
             else:
-                G = 0
+                self.G = 0
         else:
             raise Exception("Unsupported ALU operation")
 
