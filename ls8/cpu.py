@@ -25,7 +25,7 @@ class CPU:
         self.pc = 0
         self.branch = {}
 
-    def load(self):
+    def load(self, fileLoaded):
         """Load a program into memory."""
 
         address = 0
@@ -42,14 +42,13 @@ class CPU:
         #     0b00000001, # HLT
         # ]
 
-        file = open('ls8/examples/call.ls8', 'r')
+        file = open(f'ls8/examples/{fileLoaded}.ls8', 'r')
 
         for line in file:
             line = line.split('#')[0]
             line = line.strip()
             if len(line) > 0:
                 line = int(line, 2)
-                # print(line)
                 program.append(line)
             
         
@@ -161,10 +160,8 @@ class CPU:
             
 #Stack pointer looks at top of the stack or F3 if empty. 243 decimal // binary == 11110011....
 
-cpu = CPU()
 
-cpu.load()
-cpu.run()
+
 
 
 # print(cpu.ram)
