@@ -17,9 +17,10 @@ JEQ = 0b01010101
 JNE = 0b01010110
 JMP = 0b01010100
 SP = 7
-E = 0
+# E = 0
 L = 0
-G = 0
+G = 0 
+
 class CPU:
     """Main CPU class."""
 
@@ -31,7 +32,7 @@ class CPU:
         self.ram = [0] * 256 #256 bytes of memory
         self.pc = 0
         self.branch = {}
-
+        self.E = 0
     def load(self, fileLoaded):
         """Load a program into memory."""
 
@@ -79,9 +80,9 @@ class CPU:
             self.reg[reg_a] /= self.reg[reg_b]
         elif op == "COMP":
             if self.reg[reg_a] == self.reg[reg_b]:
-                E = 1
+                self.E = 1
             else:
-                E = 0
+                self.E = 0
             
             if self.reg[reg_a] < self.reg[reg_b]:
                 L = 1
@@ -181,13 +182,13 @@ class CPU:
                 new_address = self.ram[self.pc +1]
                 self.pc = self.reg[new_address]
             elif instruction_register == JEQ:
-                if E == 1:
+                if self.E == 1:
                     new_address = self.ram[self.pc + 1]
                     self.pc = self.reg[new_address]
                 else:
                     self.pc += 2
             elif instruction_register == JNE:
-                if E == 0:
+                if self.E == 0:
                     new_address = self.ram[self.pc + 1]
                     self.pc = self.reg[new_address]
                 else:
