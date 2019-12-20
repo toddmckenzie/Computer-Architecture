@@ -1,2 +1,1 @@
-
-                self.reg[SP] -= 1
+print(line)

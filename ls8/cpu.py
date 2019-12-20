@@ -9,7 +9,10 @@ MUL = 0b10100010
 # SP = 0xF3 #F3 hex, 243 decimal, 0b11110011 binary stackpointer....
 POP = 0b01000110
 PUSH = 0b01000101
-
+CALL = 0b01010000
+RET = 0b00010001
+ADD = 0b10100000
+SP = 7
 class CPU:
     """Main CPU class."""
 
@@ -39,13 +42,15 @@ class CPU:
         #     0b00000001, # HLT
         # ]
 
-        file = open('ls8/examples/stack.ls8', 'r')
+        file = open('ls8/examples/call.ls8', 'r')
 
         for line in file:
             line = line.split('#')[0]
             line = line.strip()
-            line = int(line, 2)
-            program.append(line)
+            if len(line) > 0:
+                line = int(line, 2)
+                # print(line)
+                program.append(line)
             
         
 
@@ -98,7 +103,7 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
-        SP = 7
+        
         self.reg[SP] = 0xf3
         flag = True
         while flag:
@@ -112,6 +117,11 @@ class CPU:
             elif instruction_register == PRN:
                 reg_num = self.ram_read(self.pc + 1)
                 print(self.reg[reg_num])
+                self.pc += 2
+            elif instruction_register == ADD:
+                value1 = self.ram_read(self.pc + 1)
+                value2 = self.ram_read(self.pc + 1)
+                self.alu("ADD", value1, value2)
                 self.pc += 2
             elif instruction_register == MUL:
                 reg_num1 = self.ram_read(self.pc + 1)
@@ -130,6 +140,17 @@ class CPU:
                 reg_val = self.reg[reg_num]
                 self.ram[self.reg[SP]] = reg_val
                 self.pc += 2
+            elif instruction_register == CALL:
+                return_address = self.pc + 2
+                self.reg[SP] -= 1
+                self.ram[self.reg[SP]] = return_address
+                reg_num = self.ram[self.pc + 1]
+                sub_address = self.reg[reg_num]
+                self.pc = sub_address
+            elif instruction_register == RET:
+                return_address = self.ram[self.reg[SP]]
+                self.reg[SP] += 1
+                self.pc = return_address
             elif instruction_register == HLT:
                 flag = False
                 break
@@ -146,4 +167,4 @@ cpu.load()
 cpu.run()
 
 
-# print(cpu.ram_read())
+# print(cpu.ram)
